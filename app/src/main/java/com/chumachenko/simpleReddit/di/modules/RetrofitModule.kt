@@ -1,7 +1,5 @@
 package com.chumachenko.simpleReddit.di.modules
 
-import android.app.Application
-import com.google.gson.Gson
 import com.chumachenko.simpleReddit.data.api.RedditApi
 import com.chumachenko.simpleReddit.data.api.RetrofitClient
 import dagger.Module
@@ -16,29 +14,11 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideRequestService(
-        application: Application,
-        gson: Gson
-    ): Retrofit {
-        return RetrofitClient().getInstance()
-    }
-
-//    @Singleton
-//    @Provides
-//    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-//        return Retrofit.Builder()
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .baseUrl("YOUR_BASE_URL")
-//            .client(okHttpClient)
-//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//            .build()
-//    }
+    fun provideRequestService(): Retrofit = RetrofitClient().getInstance()
 
     @Singleton
     @Provides
-    fun provideApi(retrofit: Retrofit): RedditApi {
-        return retrofit.create(RedditApi::class.java)
-    }
+    fun provideApi(retrofit: Retrofit): RedditApi = retrofit.create(RedditApi::class.java)
 
     @Singleton
     @Provides

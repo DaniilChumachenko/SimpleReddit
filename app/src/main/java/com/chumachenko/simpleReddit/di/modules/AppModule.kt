@@ -12,13 +12,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    internal fun provideContext(application: Application): Context {
-        return application
-    }
+    internal fun provideContext(application: Application): Context = application
 
     @Provides
     @Singleton
-    fun gson(): Gson {
-        return Gson()
-    }
+    fun gson(): Gson = Gson()
 }

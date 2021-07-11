@@ -79,4 +79,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.github.marlonlom:timeago:4.0.3'
+
 }
