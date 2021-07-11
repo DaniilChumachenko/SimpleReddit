@@ -2,6 +2,7 @@ package com.chumachenko.simpleReddit.data.api.response.newrespose
 
 import android.os.Parcelable
 import com.chumachenko.simpleReddit.data.api.response.RedditItem
+import com.chumachenko.simpleReddit.data.api.response.RedditItemRealm
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -14,10 +15,17 @@ class Data(
     @SerializedName("geo_filter") val geo_filter: String?,
     @SerializedName("modhash") val modhash: String?
 ): Parcelable {
-    fun toFeedList(): ArrayList<RedditItem> {
+    fun toRealm(): ArrayList<RedditItemRealm> {
+        val newList = arrayListOf<RedditItemRealm>()
+        children?.forEach { item ->
+            item.toRealm()?.let { itemRealm -> newList.add(itemRealm) }
+        }
+        return newList
+    }
+    fun toRedditItem(): ArrayList<RedditItem> {
         val newList = arrayListOf<RedditItem>()
         children?.forEach { item ->
-            item.toFeedList()?.let { it1 -> newList.add(it1) }
+            item.toRealm()?.let { it -> newList.add(it.toRedditItem()) }
         }
         return newList
     }

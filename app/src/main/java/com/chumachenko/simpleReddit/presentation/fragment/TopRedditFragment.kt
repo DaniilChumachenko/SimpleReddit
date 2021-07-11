@@ -34,7 +34,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     }
 
     private fun initObservers() = viewModel.apply {
-        getPostFromApi()
+        getPostByType("popular","top")
         viewModel.redditItem.observe(viewLifecycleOwner){
             initAdapter()
         }

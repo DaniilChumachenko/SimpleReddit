@@ -17,13 +17,25 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun getPostFromApi() {
+    fun getPostByType(subRed:String, typeSort:String) {
         compositeDisposable.add(
-            redditRepository.getFeedPosts("popular", "top")
+            redditRepository.getRedditPostsByType(subRed, typeSort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
-                    _redditItem.value = it.toFeedList()
+                    _redditItem.value = it
+                }), ({ error ->
+                    error.printStackTrace()
+                }))
+        )
+    }
+    fun getPostByTypeAndTime(subRed:String, typeSort:String, timeSort:String) {
+        compositeDisposable.add(
+            redditRepository.getRedditPostsByTypeAndTime(subRed, typeSort, timeSort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(({
+                    _redditItem.value = it
                 }), ({ error ->
                     error.printStackTrace()
                 }))

@@ -1,7 +1,7 @@
 package com.chumachenko.simpleReddit.data.api.response.newrespose
 
 import android.os.Parcelable
-import com.chumachenko.simpleReddit.data.api.response.RedditItem
+import com.chumachenko.simpleReddit.data.api.response.RedditItemRealm
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -117,7 +117,7 @@ class DataX(
      @SerializedName("wls") val wls: Int?
 ): Parcelable {
 
- fun toFeedList(): RedditItem = RedditItem(
+ fun toRealm(): RedditItemRealm = RedditItemRealm(
    id,
    title,
    thumbnail,
