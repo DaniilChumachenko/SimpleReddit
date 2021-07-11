@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.simpleReddit.presentation.adapter.TopRedditAdapter
 import com.chumachenko.simpleReddit.R
+import com.chumachenko.simpleReddit.data.api.response.RedditItem
 import com.chumachenko.simpleReddit.presentation.viewmodel.TopRedditViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_top_reddit.*
@@ -26,26 +27,36 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onViewCreated(view, savedInstanceState)
-        button_first.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
         bindViewModel()
+        initAdapter()
         initObservers()
     }
 
     private fun initObservers() = viewModel.apply {
-        getPostByType("popular","top")
-        viewModel.redditItem.observe(viewLifecycleOwner){
-            initAdapter()
+        getPostByType("popular", "top")
+        getFromLocal()
+        redditResponseItem.observe(viewLifecycleOwner) { list ->
+            redditLocalItem.value?.let {
+                if (list.containsAll(it) && it.containsAll(list)) {
+                    topRedditAdapter?.updateList(list)
+                }
+            }
+        }
+        redditLocalItem.observe(viewLifecycleOwner) {
+            topRedditAdapter?.updateList(it)
+        }
+        button_first.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
 
     private fun initAdapter(): RecyclerView = rvTopReddit.apply {
         layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        topRedditAdapter = TopRedditAdapter(viewModel.redditItem.value?: arrayListOf())
+        topRedditAdapter = TopRedditAdapter(arrayListOf())
         adapter = topRedditAdapter
         itemAnimator = null
     }
+
     private fun bindViewModel() {
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(TopRedditViewModel::class.java)

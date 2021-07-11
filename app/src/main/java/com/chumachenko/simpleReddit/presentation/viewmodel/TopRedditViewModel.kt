@@ -12,8 +12,11 @@ import javax.inject.Inject
 
 class TopRedditViewModel @Inject constructor(private val redditRepository: RedditRepository) : ViewModel() {
 
-    private val _redditItem: MutableLiveData<ArrayList<RedditItem>> = MutableLiveData()
-    val redditItem: LiveData<ArrayList<RedditItem>> = _redditItem
+    private val _redditResponseItem: MutableLiveData<ArrayList<RedditItem>> = MutableLiveData()
+    val redditResponseItem: LiveData<ArrayList<RedditItem>> = _redditResponseItem
+
+    private val _redditLocalItem: MutableLiveData<ArrayList<RedditItem>> = MutableLiveData()
+    val redditLocalItem: LiveData<ArrayList<RedditItem>> = _redditLocalItem
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -23,7 +26,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
-                    _redditItem.value = it
+                    _redditResponseItem.value = it
                 }), ({ error ->
                     error.printStackTrace()
                 }))
@@ -35,10 +38,23 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
-                    _redditItem.value = it
+                    _redditResponseItem.value = it
                 }), ({ error ->
                     error.printStackTrace()
                 }))
+        )
+    }
+
+    fun getFromLocal() {
+        compositeDisposable.add(
+            redditRepository.getFromLocal()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(({
+                _redditLocalItem.value = it
+            }), ({ error ->
+                error.printStackTrace()
+            }))
         )
     }
 }

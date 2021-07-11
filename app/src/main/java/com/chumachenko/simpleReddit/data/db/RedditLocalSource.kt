@@ -236,4 +236,28 @@ class RedditLocalSource @Inject constructor(val gson: Gson) : RedditDataSource<R
         }
     }
 
+    override fun findAll(): Maybe<ArrayList<RedditItem>> {
+        val realm = Realm.getInstance(realmConfiguration!!)
+        realm.refresh()
+
+        val managedModels: List<RedditItemRealm>? = realm.where(realmEntity)
+            .findAll()
+
+        val unmanagedModels = realm.copyFromRealm(managedModels!!)
+
+        realm.close()
+
+        return if (unmanagedModels.isEmpty()) {
+            Maybe.empty()
+        } else {
+
+            Maybe.just(unmanagedModels)
+                .map { items ->
+                    val list: ArrayList<RedditItem> = ArrayList()
+                    items.forEach { item -> list.add(item.toRedditItem()) }
+                    list
+                }
+        }
+    }
+
 }

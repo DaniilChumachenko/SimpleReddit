@@ -4,6 +4,8 @@ import com.chumachenko.simpleReddit.data.api.RedditApi
 import com.chumachenko.simpleReddit.data.api.response.RedditItem
 import com.chumachenko.simpleReddit.data.db.RedditLocalSource
 import com.chumachenko.simpleReddit.data.repository.RedditRepository
+import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
@@ -31,4 +33,7 @@ class RedditRepositoryImpl(
                 redditDataSource.addOrReplace(it.toRealm())
                 it.toRedditItem()
             }
+
+    override fun getFromLocal(): Observable<ArrayList<RedditItem>> =
+        redditDataSource.findAll().toObservable()
 }
