@@ -10,10 +10,8 @@ import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.fragment.OnBottomReachedListener
 import com.chumachenko.simpleReddit.presentation.fragment.OnOpenPostListener
 import com.github.marlonlom.utilities.timeago.TimeAgo
-import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.v3_item_reddit.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -42,11 +40,6 @@ class TopRedditAdapter(
         this.list = list
         notifyDataSetChanged()
     }
-    fun getFormattedTime(locale: Locale?, time: Long, pattern: String?): String? {
-        val postTimeCalendar = Calendar.getInstance()
-        postTimeCalendar.timeInMillis = time
-        return SimpleDateFormat(pattern, locale).format(postTimeCalendar.time)
-    }
 
     inner class ItemTagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
@@ -61,7 +54,7 @@ class TopRedditAdapter(
             tvNumComments.text = redditItem.num_comments.toString()
             tvScore.text = redditItem.score.toString()
             redditItem.uts?.let {
-                tvTimePub.text = TimeAgo.using(it.toLong()*1000)
+                tvTimePub.text = TimeAgo.using(it.toLong() * 1000)
             }
             if (redditItem.thumbnail?.length ?: 0 < 10)
                 ivListImage.visibility = GONE

@@ -11,7 +11,8 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
-class RedditLocalSource @Inject constructor(val gson: Gson) : RedditDataSource<RedditItemRealm, RedditItem> {
+class RedditLocalSource @Inject constructor(val gson: Gson) :
+    RedditDataSource<RedditItemRealm, RedditItem> {
 
     private val realmConfiguration: RealmConfiguration? = Realm.getDefaultConfiguration()
     private val realmEntity: Class<RedditItemRealm> = RedditItemRealm::class.java

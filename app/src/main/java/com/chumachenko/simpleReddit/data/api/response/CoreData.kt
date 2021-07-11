@@ -27,7 +27,8 @@ class CoreData(
         children?.forEach { item ->
             item.toRealm()?.let { it ->
                 it.after = after
-                newList.add(it.toRedditItem()) }
+                newList.add(it.toRedditItem())
+            }
         }
         return newList
     }

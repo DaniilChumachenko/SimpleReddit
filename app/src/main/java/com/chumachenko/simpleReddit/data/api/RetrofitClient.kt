@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitClient {
     fun getInstance(): Retrofit = Retrofit.Builder().baseUrl(BASE_ENDPOINT)
-                   .addConverterFactory(GsonConverterFactory.create())
-                   .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                   .build()
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
 
 }

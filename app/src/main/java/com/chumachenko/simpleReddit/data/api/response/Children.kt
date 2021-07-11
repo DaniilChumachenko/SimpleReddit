@@ -8,7 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class Children(
     @SerializedName("data") val data: Data?
-): Parcelable
-{
+) : Parcelable {
     fun toRealm(): RedditItemRealm? = data?.toRealm()
 }

@@ -14,11 +14,11 @@ data class RedditItem(
     var num_comments: Int?,
     var score: Int?,
     var permalink: String?
-) : Parcelable{
+) : Parcelable {
 
     override fun hashCode(): Int = id.hashCode()
     override fun equals(other: Any?): Boolean =
-            if (other is RedditItem) {
-                id == other.id
-            } else false
+        if (other is RedditItem) {
+            id == other.id
+        } else false
 }

@@ -13,7 +13,11 @@ class RedditRepositoryImpl(
     private val redditDataSource: RedditLocalSource
 ) : RedditRepository {
 
-    override fun getRedditPostsByType(subredName: String, typeSort: String, lastItem: String?): Single<ArrayList<RedditItem>> =
+    override fun getRedditPostsByType(
+        subredName: String,
+        typeSort: String,
+        lastItem: String?
+    ): Single<ArrayList<RedditItem>> =
         api.getSubredditPostsByType(subredName, typeSort, lastItem)
             .subscribeOn(Schedulers.io())
             .map {
@@ -26,7 +30,7 @@ class RedditRepositoryImpl(
         typeSort: String,
         timeSort: String
     ): Single<ArrayList<RedditItem>> =
-        api.getSubredditPostsByTypeAndTime(subredName, typeSort,timeSort, null)
+        api.getSubredditPostsByTypeAndTime(subredName, typeSort, timeSort, null)
             .subscribeOn(Schedulers.io())
             .map {
                 redditDataSource.addOrReplace(it.toRealm())

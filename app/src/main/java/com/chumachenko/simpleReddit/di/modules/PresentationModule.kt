@@ -5,9 +5,9 @@ import com.chumachenko.simpleReddit.di.viewModel.ViewModelModule
 import dagger.Module
 
 @Module(
-        includes = [
-            ActivityBuilder::class,
-            ViewModelModule::class
-        ]
+    includes = [
+        ActivityBuilder::class,
+        ViewModelModule::class
+    ]
 )
 abstract class PresentationModule

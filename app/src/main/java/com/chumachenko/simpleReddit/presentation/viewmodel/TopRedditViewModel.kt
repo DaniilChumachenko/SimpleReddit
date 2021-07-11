@@ -56,15 +56,15 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
     fun getFromLocal() {
         compositeDisposable.add(
             redditRepository.getFromLocal()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(({
-                _redditLocalItem.value = it
-            }), ({ error ->
-                error.printStackTrace()
-            }))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(({
+                    _redditLocalItem.value = it
+                }), ({ error ->
+                    error.printStackTrace()
+                }))
         )
-        if (redditLocalItem.value?.size==0||redditLocalItem.value == null)
+        if (redditLocalItem.value?.size == 0 || redditLocalItem.value == null)
             _redditLocalItem.value = arrayListOf()
 
     }

@@ -11,7 +11,7 @@ public class RealmUtils {
         Realm.init(context);
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .compactOnLaunch()
-                .name("securityspace.realm")
+                .name("simplereddit.realm")
                 .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();

@@ -60,7 +60,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
             }
         }, object : OnOpenPostListener {
             override fun openPost(permalink: String?) {
-                val uri = Uri.parse(GlobalConstants.BASE_ENDPOINT+permalink)
+                val uri = Uri.parse(GlobalConstants.BASE_ENDPOINT + permalink)
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent)
             }
