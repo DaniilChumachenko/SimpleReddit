@@ -1,6 +1,6 @@
 package com.chumachenko.simpleReddit.data.db
 
-import com.chumachenko.simpleReddit.data.api.response.RedditItemRealm
+import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
 import io.reactivex.Maybe
 
 interface RedditDataSource<M, L> : LocalDataSource<M, L> {

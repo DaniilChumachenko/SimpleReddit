@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clSaveStepItem"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="@color/transparent">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/some_gray"
@@ -16,30 +17,91 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvListName"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitleReddit"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="19dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
+        android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ivListImage"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="List Name" />
+        tools:text="Title" />
+
+    <TextView
+        android:id="@+id/tvSubredditName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleReddit"
+        app:layout_constraintEnd_toStartOf="@+id/tvTimePub"
+        tools:text="Subreddit" />
+
+    <TextView
+        android:id="@+id/tvNumComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvScore"
+        tools:text="Comments" />
+
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvNumComments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivListImage"
+        tools:text="Score" />
+
+    <TextView
+        android:id="@+id/tvTimePub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleReddit"
+        app:layout_constraintStart_toEndOf="@+id/tvSubredditName"
+        tools:text="Time" />
 
     <ImageView
         android:id="@+id/ivListImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/tvListName"
-        app:layout_constraintEnd_toStartOf="@+id/tvListName"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvNumComments"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvListName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSubredditName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

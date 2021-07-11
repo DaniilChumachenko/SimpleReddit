@@ -9,6 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="some_gray">#dddddd</color>
+    <color name="gray">#747474</color>
+    <color name="orange">#F64E2B</color>
+    <color name="green">#27FF00</color>
+    <color name="blue">#00C4FF</color>
 
 
 </resources>

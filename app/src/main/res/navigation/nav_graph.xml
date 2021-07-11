@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.chumachenko.simpleReddit.presentation.fragment.TopRedditFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/TopRedditFragment"
         tools:layout="@layout/fragment_top_reddit">
 
         <action
