@@ -3,6 +3,7 @@ package com.chumachenko.simpleReddit.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.data.repository.RedditRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,11 +14,13 @@ import javax.inject.Inject
 class TopRedditViewModel @Inject constructor(private val redditRepository: RedditRepository) :
     ViewModel() {
 
-    private val _redditResponseItem: MutableLiveData<ArrayList<RedditItem>> = MutableLiveData()
-    val redditResponseItem: LiveData<ArrayList<RedditItem>> = _redditResponseItem
+    private val _redditResponseItem: MutableLiveData<Resource<ArrayList<RedditItem>>> =
+        MutableLiveData()
+    val redditResponseItem: LiveData<Resource<ArrayList<RedditItem>>> = _redditResponseItem
 
-    private val _redditLocalItem: MutableLiveData<ArrayList<RedditItem>> = MutableLiveData()
-    val redditLocalItem: LiveData<ArrayList<RedditItem>> = _redditLocalItem
+    private val _redditLocalItem: MutableLiveData<Resource<ArrayList<RedditItem>>> =
+        MutableLiveData()
+    val redditLocalItem: LiveData<Resource<ArrayList<RedditItem>>> = _redditLocalItem
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -27,14 +30,15 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
-                    if (redditResponseItem.value?.size == null)
-                        _redditResponseItem.value = it
+                    if (redditResponseItem.value?.data?.size == null)
+                        _redditResponseItem.value = Resource.success(it)
                     else {
-                        val oldlist = redditResponseItem.value
-                        oldlist?.addAll(it)
-                        _redditResponseItem.value = oldlist
+                        val oldList = redditResponseItem.value?.data
+                        oldList?.addAll(it)
+                        _redditResponseItem.value = Resource.success(oldList)
                     }
                 }), ({ error ->
+                    _redditResponseItem.value = Resource.error()
                     error.printStackTrace()
                 }))
         )
@@ -46,7 +50,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
-                    _redditResponseItem.value = it
+//                    _redditResponseItem.value = it
                 }), ({ error ->
                     error.printStackTrace()
                 }))
@@ -58,15 +62,39 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
             redditRepository.getFromLocal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate{
+                    if (redditLocalItem.value == null)
+                        _redditLocalItem.value = Resource.loading()
+                }
                 .subscribe(({
-                    _redditLocalItem.value = it
+                    _redditLocalItem.value = Resource.success(it)
+                }), ({ error ->
+                    _redditResponseItem.value = Resource.error()
+                    error.printStackTrace()
+                }))
+
+        )
+    }
+
+    fun clearStorage(data: ArrayList<RedditItem>?) {
+        data?.sortBy { it.uts }
+        val realmList = arrayListOf<RedditItemRealm>()
+        data?.forEachIndexed { index, redditItem ->
+            if (index > 49)
+                realmList.add(redditItem.toRealm())
+        }
+        compositeDisposable.add(
+            redditRepository.clearStorage(realmList)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate{
+                    getFromLocal()
+                }
+                .subscribe(({
                 }), ({ error ->
                     error.printStackTrace()
                 }))
         )
-        if (redditLocalItem.value?.size == 0 || redditLocalItem.value == null)
-            _redditLocalItem.value = arrayListOf()
-
     }
 
     override fun onCleared() {

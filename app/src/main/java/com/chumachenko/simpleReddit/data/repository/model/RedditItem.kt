@@ -1,6 +1,7 @@
 package com.chumachenko.simpleReddit.data.repository.model
 
 import android.os.Parcelable
+import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -15,7 +16,7 @@ data class RedditItem(
     var score: Int?,
     var permalink: String?
 ) : Parcelable {
-
+    fun toRealm() = RedditItemRealm(id,title, thumbnail, uts, after, subreddit, num_comments, score, permalink)
     override fun hashCode(): Int = id.hashCode()
     override fun equals(other: Any?): Boolean =
         if (other is RedditItem) {

@@ -1,5 +1,7 @@
 package com.chumachenko.simpleReddit.presentation.fragment
 
+import com.chumachenko.simpleReddit.data.repository.model.RedditItem
+
 interface OnBottomReachedListener {
-    fun onBottomReached(position: Int)
+    fun onBottomReached(item: RedditItem)
 }

@@ -3,6 +3,7 @@ package com.chumachenko.simpleReddit.data.repository.repositoryImpl
 import com.chumachenko.simpleReddit.data.api.RedditApi
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.data.db.RedditLocalSource
+import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
 import com.chumachenko.simpleReddit.data.repository.RedditRepository
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -39,4 +40,7 @@ class RedditRepositoryImpl(
 
     override fun getFromLocal(): Observable<ArrayList<RedditItem>> =
         redditDataSource.findAll().toObservable()
+
+    override fun clearStorage(listItem:ArrayList<RedditItemRealm>): Observable<ArrayList<RedditItem>> =
+        redditDataSource.delete(listItem).toObservable()
 }

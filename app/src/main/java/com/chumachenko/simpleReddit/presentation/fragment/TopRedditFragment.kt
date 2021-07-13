@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.simpleReddit.GlobalConstants
 import com.chumachenko.simpleReddit.R
+import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.adapter.TopRedditAdapter
+import com.chumachenko.simpleReddit.presentation.viewmodel.Status
 import com.chumachenko.simpleReddit.presentation.viewmodel.TopRedditViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
@@ -37,12 +39,65 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     }
 
     private fun initObservers() = viewModel.apply {
-        getPostByType("popular", "top", null)
-        redditResponseItem.observe(viewLifecycleOwner) { list ->
-            if (list.size >= 50)
-                Snackbar.make(rvTopReddit, "It be top 50 of reddit!", Snackbar.LENGTH_LONG).show()
-            else
-                redditAdapter?.updateList(list)
+        getFromLocal()
+        redditLocalItem.observe(viewLifecycleOwner) { local ->
+            when (local.status) {
+                Status.LOADING -> {
+                    pgLoadReddit.visibility = VISIBLE
+                    if (local.data?.size == null || local.data?.size == 0)
+                        getPostByType("popular", "top", null)
+                }
+                Status.SUCCESS -> {
+                    pgLoadReddit.visibility = GONE
+                    local.data?.let {
+                        when {
+                            it.size in 1..49 -> {
+                                redditAdapter?.updateList(it)
+                            }
+                            it.size > 50 -> {
+                                clearStorage(it)
+                            }
+                            else -> {
+                                redditAdapter?.updateList(it)
+                                Snackbar.make(
+                                    rvTopReddit,
+                                    "It be top 50 of reddit!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                }
+                Status.ERROR -> {
+                    pgLoadReddit.visibility = GONE
+                    local.throwable?.let { error ->
+                        error.printStackTrace()
+                        Snackbar.make(rvTopReddit, "Loading error!", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+        redditResponseItem.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.LOADING -> {
+                    pgLoadReddit.visibility = VISIBLE
+                }
+                Status.SUCCESS -> {
+                    pgLoadReddit.visibility = GONE
+                    if (response.data?.size ?: 0 in 1..49)
+                        response.data?.let { redditAdapter?.updateList(it) }
+                    else
+                        Snackbar.make(rvTopReddit, "It be top 50 of reddit!", Snackbar.LENGTH_LONG)
+                            .show()
+                }
+                Status.ERROR -> {
+                    pgLoadReddit.visibility = GONE
+                    response.throwable?.let { error ->
+                        error.printStackTrace()
+                        Snackbar.make(rvTopReddit, "Loading error!", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
             pgLoadReddit.visibility = GONE
         }
     }
@@ -50,12 +105,12 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     private fun initAdapter(): RecyclerView = rvTopReddit.apply {
         layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         redditAdapter = TopRedditAdapter(arrayListOf(), object : OnBottomReachedListener {
-            override fun onBottomReached(position: Int) {
+            override fun onBottomReached(item: RedditItem) {
                 pgLoadReddit.visibility = VISIBLE
                 viewModel.getPostByType(
                     "popular",
                     "top",
-                    viewModel.redditResponseItem.value?.last()?.after
+                    item.after
                 )
             }
         }, object : OnOpenPostListener {

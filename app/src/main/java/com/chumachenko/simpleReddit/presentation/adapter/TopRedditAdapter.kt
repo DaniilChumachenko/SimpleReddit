@@ -32,11 +32,12 @@ class TopRedditAdapter(
 
     override fun onBindViewHolder(holder: ItemTagViewHolder, position: Int) {
         holder.bind(list[position])
-        if (position == list.size - 1)
-            onBottomReachedListener.onBottomReached(position)
+        if (position == list.size-1&&list.size<50)
+            onBottomReachedListener.onBottomReached(list[position])
     }
 
     fun updateList(list: ArrayList<RedditItem>) {
+        list.sortByDescending { it.score }
         this.list = list
         notifyDataSetChanged()
     }

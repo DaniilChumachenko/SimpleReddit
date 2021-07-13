@@ -130,7 +130,7 @@ class RedditLocalSource @Inject constructor(val gson: Gson) :
         }
     }
 
-    override fun addOrReplace(models: List<RedditItemRealm>?): Maybe<List<RedditItem>> {
+    override fun addOrReplace(models: ArrayList<RedditItemRealm>?): Maybe<ArrayList<RedditItem>> {
         try {
             Realm.getInstance(realmConfiguration!!).use { realmInstance ->
                 realmInstance.executeTransaction { realm: Realm ->
@@ -166,10 +166,10 @@ class RedditLocalSource @Inject constructor(val gson: Gson) :
         return Completable.defer { Completable.complete() }
     }
 
-    override fun delete(models: List<RedditItemRealm>?): Completable {
+    override fun delete(models: ArrayList<RedditItemRealm>?): Completable {
         try {
             Realm.getInstance(realmConfiguration!!).use { realmInstance ->
-                realmInstance.executeTransaction { realm: Realm ->
+                realmInstance.executeTransactionAsync { realm: Realm ->
                     realm.where(realmEntity)
                         .`in`("id", getIds(models ?: ArrayList()))
                         .findAll()
