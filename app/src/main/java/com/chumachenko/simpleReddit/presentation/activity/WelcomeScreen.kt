@@ -9,6 +9,11 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class WelcomeScreen : AppCompatActivity(), HasAndroidInjector {
@@ -19,14 +24,25 @@ class WelcomeScreen : AppCompatActivity(), HasAndroidInjector {
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
+
+    private var disposable: Disposable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.welcome_screen)
         supportActionBar?.hide()
-        Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }, 1000)
+        disposable = Observable.timer(800, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 }
