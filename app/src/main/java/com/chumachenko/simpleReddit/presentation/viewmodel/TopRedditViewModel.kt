@@ -22,6 +22,10 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
         MutableLiveData()
     val redditLocalItem: LiveData<Resource<ArrayList<RedditItem>>> = _redditLocalItem
 
+    private val _redditItemForSort: MutableLiveData<Resource<ArrayList<RedditItem>>> =
+        MutableLiveData()
+    val redditItemForSort: LiveData<Resource<ArrayList<RedditItem>>> = _redditItemForSort
+
     private val compositeDisposable = CompositeDisposable()
 
     fun getPostByType(subRed: String, typeSort: String, lastItem: String?) {
@@ -61,6 +65,24 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                     _redditLocalItem.value = Resource.success(it)
                 }), ({ error ->
                     _redditResponseItem.value = Resource.error()
+                    error.printStackTrace()
+                }))
+
+        )
+    }
+    fun getFromLocalForSort() {
+        compositeDisposable.add(
+            redditRepository.getFromLocal()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate {
+                    if (redditItemForSort.value == null)
+                        _redditItemForSort.value = Resource.loading()
+                }
+                .subscribe(({
+                    _redditItemForSort.value = Resource.success(it)
+                }), ({ error ->
+                    _redditItemForSort.value = Resource.error()
                     error.printStackTrace()
                 }))
 

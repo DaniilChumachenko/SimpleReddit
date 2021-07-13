@@ -11,4 +11,6 @@
     <string name="main_filter_top">top</string>
     <string name="last_post">This was the last post from the top 50!</string>
     <string name="loading_error">Loading error!</string>
+    <string name="sort_by_list">Sort list by rating</string>
+    <string name="sort_by_comments">Sort list by comments</string>
 </resources>
