@@ -11,10 +11,4 @@ interface RedditApi {
         @Path("sortType") sortType: String?,
         @Query("after") lastItem: String?
     ): Single<RedditItemResponse>
-
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=23")
-    fun getSubredditPostsByTypeAndTime(
-        @Path("subredditName") subredditName: String?, @Path("sortType") sortType: String?,
-        @Query("t") sortTime: String?, @Query("after") lastItem: String?
-    ): Single<RedditItemResponse>
 }

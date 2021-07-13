@@ -59,8 +59,3 @@ class Resource<T>(
         }
     }
 }
-enum class Status {
-    SUCCESS,
-    ERROR,
-    LOADING
-}

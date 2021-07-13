@@ -45,7 +45,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 Status.LOADING -> {
                     pgLoadReddit.visibility = VISIBLE
                     if (local.data?.size == null || local.data?.size == 0)
-                        getPostByType("popular", "top", null)
+                        getPostByType(getString(R.string.main_subreddit), getString(R.string.main_filter_top), null)
                 }
                 Status.SUCCESS -> {
                     pgLoadReddit.visibility = GONE
@@ -59,11 +59,6 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                             }
                             else -> {
                                 redditAdapter?.updateList(it)
-                                Snackbar.make(
-                                    rvTopReddit,
-                                    "It be top 50 of reddit!",
-                                    Snackbar.LENGTH_LONG
-                                ).show()
                             }
                         }
                     }
@@ -72,7 +67,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                     pgLoadReddit.visibility = GONE
                     local.throwable?.let { error ->
                         error.printStackTrace()
-                        Snackbar.make(rvTopReddit, "Loading error!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(rvTopReddit, getString(R.string.loading_error), Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -84,20 +79,17 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 }
                 Status.SUCCESS -> {
                     pgLoadReddit.visibility = GONE
-                    if (response.data?.size ?: 0 in 1..49)
+                    if (response.data?.size ?: 0 in 1..50)
                         response.data?.let {
                             redditAdapter?.updateList(it)
                             rvTopReddit.scrollToPosition(lastPosition)
                         }
-                    else
-                        Snackbar.make(rvTopReddit, "It be top 50 of reddit!", Snackbar.LENGTH_LONG)
-                            .show()
                 }
                 Status.ERROR -> {
                     pgLoadReddit.visibility = GONE
                     response.throwable?.let { error ->
                         error.printStackTrace()
-                        Snackbar.make(rvTopReddit, "Loading error!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(rvTopReddit, getString(R.string.loading_error), Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -112,10 +104,19 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 lastPosition = position
                 pgLoadReddit.visibility = VISIBLE
                 viewModel.getPostByType(
-                    "popular",
-                    "top",
+                    getString(R.string.main_subreddit),
+                    getString(R.string.main_filter_top),
                     item.after
                 )
+            }
+
+            override fun lastItem(last: Boolean) {
+                if (last)
+                    Snackbar.make(
+                        rvTopReddit,
+                        getString(R.string.last_post),
+                        Snackbar.LENGTH_LONG
+                    ).show()
             }
         }, object : OnOpenPostListener {
             override fun openPost(permalink: String?) {

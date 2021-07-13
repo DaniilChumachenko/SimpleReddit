@@ -1,11 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Theme.SimpleReddit" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/white</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.SimpleReddit.NoActionBar">

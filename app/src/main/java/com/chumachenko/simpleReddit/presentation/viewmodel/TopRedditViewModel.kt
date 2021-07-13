@@ -48,19 +48,6 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
         )
     }
 
-    fun getPostByTypeAndTime(subRed: String, typeSort: String, timeSort: String) {
-        compositeDisposable.add(
-            redditRepository.getRedditPostsByTypeAndTime(subRed, typeSort, timeSort)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(({
-//                    _redditResponseItem.value = it
-                }), ({ error ->
-                    error.printStackTrace()
-                }))
-        )
-    }
-
     fun getFromLocal() {
         compositeDisposable.add(
             redditRepository.getFromLocal()

@@ -26,18 +26,6 @@ class RedditRepositoryImpl(
                 it.toRedditItem()
             }
 
-    override fun getRedditPostsByTypeAndTime(
-        subredName: String,
-        typeSort: String,
-        timeSort: String
-    ): Single<ArrayList<RedditItem>> =
-        api.getSubredditPostsByTypeAndTime(subredName, typeSort, timeSort, null)
-            .subscribeOn(Schedulers.io())
-            .map {
-                redditDataSource.addOrReplace(it.toRealm())
-                it.toRedditItem()
-            }
-
     override fun getFromLocal(): Observable<ArrayList<RedditItem>> =
         redditDataSource.findAll().toObservable()
 
