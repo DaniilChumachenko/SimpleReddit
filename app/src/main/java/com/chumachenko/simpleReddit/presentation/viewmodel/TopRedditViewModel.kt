@@ -31,7 +31,11 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(({
                     if (redditResponseItem.value?.data?.size == null)
-                        _redditResponseItem.value = Resource.success(it)
+                        if (redditLocalItem.value?.data?.size ?: 0 > 0)
+                            _redditResponseItem.value =
+                                Resource.success(redditLocalItem.value?.data)
+                        else
+                            _redditResponseItem.value = Resource.success(it)
                     else {
                         val oldList = redditResponseItem.value?.data
                         oldList?.addAll(it)
@@ -62,7 +66,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
             redditRepository.getFromLocal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate{
+                .doAfterTerminate {
                     if (redditLocalItem.value == null)
                         _redditLocalItem.value = Resource.loading()
                 }
@@ -87,7 +91,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
             redditRepository.clearStorage(realmList)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate{
+                .doAfterTerminate {
                     getFromLocal()
                 }
                 .subscribe(({
