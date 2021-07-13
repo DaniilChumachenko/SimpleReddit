@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="italic"
         android:layout_margin="10dp"
@@ -52,14 +52,15 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="italic"
         android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvScore"
-        tools:text="Comments" />
+        tools:text="Comments"
+        app:drawableStartCompat="@drawable/ic_comments" />
 
 
     <TextView
@@ -69,14 +70,15 @@
         android:layout_margin="10dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvNumComments"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivListImage"
-        tools:text="Score" />
+        tools:text="Score"
+        app:drawableStartCompat="@drawable/ic_score" />
 
     <TextView
         android:id="@+id/tvTimePub"
@@ -84,14 +86,15 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="italic"
         android:layout_margin="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitleReddit"
         app:layout_constraintStart_toEndOf="@+id/tvSubredditName"
-        tools:text="Time" />
+        tools:text="Time"
+        app:drawableStartCompat="@drawable/ic_time_ago" />
 
     <ImageView
         android:id="@+id/ivListImage"

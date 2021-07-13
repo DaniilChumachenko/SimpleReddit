@@ -29,7 +29,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     lateinit var viewModel: TopRedditViewModel
 
     private var redditAdapter: TopRedditAdapter? = null
-
+    private var lastPosition = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onViewCreated(view, savedInstanceState)
@@ -85,7 +85,10 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 Status.SUCCESS -> {
                     pgLoadReddit.visibility = GONE
                     if (response.data?.size ?: 0 in 1..49)
-                        response.data?.let { redditAdapter?.updateList(it) }
+                        response.data?.let {
+                            redditAdapter?.updateList(it)
+                            rvTopReddit.scrollToPosition(lastPosition)
+                        }
                     else
                         Snackbar.make(rvTopReddit, "It be top 50 of reddit!", Snackbar.LENGTH_LONG)
                             .show()
@@ -105,7 +108,8 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
     private fun initAdapter(): RecyclerView = rvTopReddit.apply {
         layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         redditAdapter = TopRedditAdapter(arrayListOf(), object : OnBottomReachedListener {
-            override fun onBottomReached(item: RedditItem) {
+            override fun onBottomReached(item: RedditItem, position: Int) {
+                lastPosition = position
                 pgLoadReddit.visibility = VISIBLE
                 viewModel.getPostByType(
                     "popular",

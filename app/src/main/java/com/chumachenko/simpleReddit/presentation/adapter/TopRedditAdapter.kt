@@ -3,6 +3,7 @@ package com.chumachenko.simpleReddit.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.simpleReddit.R
@@ -32,14 +33,17 @@ class TopRedditAdapter(
 
     override fun onBindViewHolder(holder: ItemTagViewHolder, position: Int) {
         holder.bind(list[position])
-        if (position == list.size-1&&list.size<50)
-            onBottomReachedListener.onBottomReached(list[position])
+        if (position == list.size - 1 && list.size < 50)
+            onBottomReachedListener.onBottomReached(list[position], position)
     }
 
-    fun updateList(list: ArrayList<RedditItem>) {
-        list.sortByDescending { it.score }
-        this.list = list
-        notifyDataSetChanged()
+    fun updateList(newList: ArrayList<RedditItem>) {
+        newList.sortByDescending { it.score }
+        val oldSize = itemCount
+        this.list.clear()
+        this.list.addAll(newList)
+        notifyItemRangeRemoved(0, oldSize)
+        notifyItemRangeInserted(0, itemCount)
     }
 
     inner class ItemTagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -57,10 +61,12 @@ class TopRedditAdapter(
             redditItem.uts?.let {
                 tvTimePub.text = TimeAgo.using(it.toLong() * 1000)
             }
-            if (redditItem.thumbnail?.length ?: 0 < 10)
+            if (redditItem.thumbnail?.length ?: 0 < 10) {
                 ivListImage.visibility = GONE
-            else
+            } else {
+                ivListImage.visibility = VISIBLE
                 Picasso.get().load(redditItem.thumbnail).into(ivListImage)
+            }
         }
 
     }
