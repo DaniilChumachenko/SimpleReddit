@@ -16,5 +16,6 @@ open class RedditItemRealm(
     var score: Int? = 0,
     var permalink: String? = ""
 ) : RealmObject() {
-    fun toRedditItem() = RedditItem(id, title, thumbnail, uts, after, subreddit, num_comments, score, permalink)
+    fun toRedditItem() =
+        RedditItem(id, title, thumbnail, uts, after, subreddit, num_comments, score, permalink)
 }

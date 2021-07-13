@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
-import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.data.repository.RedditRepository
+import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -70,6 +70,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
 
         )
     }
+
     fun getFromLocalForSort() {
         compositeDisposable.add(
             redditRepository.getFromLocal()

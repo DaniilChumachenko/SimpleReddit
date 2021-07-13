@@ -21,11 +21,9 @@ import com.chumachenko.simpleReddit.presentation.adapter.TopRedditAdapter
 import com.chumachenko.simpleReddit.presentation.viewmodel.SortType
 import com.chumachenko.simpleReddit.presentation.viewmodel.Status
 import com.chumachenko.simpleReddit.presentation.viewmodel.TopRedditViewModel
-import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_top_reddit.*
-import java.util.ArrayList
 import javax.inject.Inject
 
 
@@ -148,7 +146,7 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                         SortType.RATING -> local.data?.sortByDescending { it.score }
                         SortType.COMMENT -> local.data?.sortByDescending { it.num_comments }
                     }
-                    redditAdapter?.updateList(local.data?: arrayListOf())
+                    redditAdapter?.updateList(local.data ?: arrayListOf())
                 }
                 Status.ERROR -> {
                     pgLoadReddit.visibility = GONE

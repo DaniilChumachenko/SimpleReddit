@@ -1,7 +1,7 @@
 package com.chumachenko.simpleReddit.data.db
 
-import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
+import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Maybe
