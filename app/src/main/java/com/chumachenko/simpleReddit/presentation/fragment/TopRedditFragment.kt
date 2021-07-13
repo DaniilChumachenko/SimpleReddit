@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.simpleReddit.GlobalConstants
+import com.chumachenko.simpleReddit.GlobalConstants.MAX_POSTS_COUNT
 import com.chumachenko.simpleReddit.R
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.adapter.TopRedditAdapter
@@ -45,21 +46,20 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 Status.LOADING -> {
                     pgLoadReddit.visibility = VISIBLE
                     if (local.data?.size == null || local.data?.size == 0)
-                        getPostByType(getString(R.string.main_subreddit), getString(R.string.main_filter_top), null)
+                        getPostByType(
+                            getString(R.string.main_subreddit),
+                            getString(R.string.main_filter_top),
+                            null
+                        )
                 }
                 Status.SUCCESS -> {
                     pgLoadReddit.visibility = GONE
-                    local.data?.let {
+                    local.data?.let { list ->
+                        list.sortByDescending { it.score }
                         when {
-                            it.size in 1..49 -> {
-                                redditAdapter?.updateList(it)
-                            }
-                            it.size > 50 -> {
-                                clearStorage(it)
-                            }
-                            else -> {
-                                redditAdapter?.updateList(it)
-                            }
+                            list.size in 1 until MAX_POSTS_COUNT -> redditAdapter?.updateList(list)
+                            list.size > MAX_POSTS_COUNT -> clearStorage(list)
+                            else -> redditAdapter?.updateList(list)
                         }
                     }
                 }
@@ -67,7 +67,11 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                     pgLoadReddit.visibility = GONE
                     local.throwable?.let { error ->
                         error.printStackTrace()
-                        Snackbar.make(rvTopReddit, getString(R.string.loading_error), Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            rvTopReddit,
+                            getString(R.string.loading_error),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -79,17 +83,21 @@ class TopRedditFragment : Fragment(R.layout.fragment_top_reddit) {
                 }
                 Status.SUCCESS -> {
                     pgLoadReddit.visibility = GONE
-                    if (response.data?.size ?: 0 in 1..50)
-                        response.data?.let {
+                    response.data?.let {
+                        if (it.size in 1..MAX_POSTS_COUNT)
                             redditAdapter?.updateList(it)
-                            rvTopReddit.scrollToPosition(lastPosition)
-                        }
+                        rvTopReddit.scrollToPosition(lastPosition)
+                    }
                 }
                 Status.ERROR -> {
                     pgLoadReddit.visibility = GONE
                     response.throwable?.let { error ->
                         error.printStackTrace()
-                        Snackbar.make(rvTopReddit, getString(R.string.loading_error), Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            rvTopReddit,
+                            getString(R.string.loading_error),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

@@ -6,7 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chumachenko.simpleReddit.GlobalConstants.COUNT_OF_POSTS
+import com.chumachenko.simpleReddit.GlobalConstants.MAX_POSTS_COUNT
 import com.chumachenko.simpleReddit.R
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.fragment.OnBottomReachedListener
@@ -34,14 +34,13 @@ class TopRedditAdapter(
 
     override fun onBindViewHolder(holder: ItemTagViewHolder, position: Int) {
         holder.bind(list[position])
-        if (position == list.size - 1 && list.size < COUNT_OF_POSTS)
+        if (position == list.size - 1 && list.size < MAX_POSTS_COUNT)
             onBottomReachedListener.onBottomReached(list[position], position)
-        else if (position == COUNT_OF_POSTS-1)
+        else if (position == MAX_POSTS_COUNT - 1)
             onBottomReachedListener.lastItem(true)
     }
 
     fun updateList(newList: ArrayList<RedditItem>) {
-        newList.sortByDescending { it.score }
         val oldSize = itemCount
         this.list.clear()
         this.list.addAll(newList)
