@@ -16,7 +16,7 @@
             android:name=".presentation.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.SimpleReddit.NoActionBar" />
-        <activity android:name=".presentation.activity.WelcomeScreen">
+        <activity android:name=".presentation.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

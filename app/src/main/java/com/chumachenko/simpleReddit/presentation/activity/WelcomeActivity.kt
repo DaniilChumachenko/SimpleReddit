@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class WelcomeScreen : AppCompatActivity(), HasAndroidInjector {
+class WelcomeActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
@@ -29,7 +29,7 @@ class WelcomeScreen : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.welcome_screen)
+        setContentView(R.layout.activity_welcome)
         supportActionBar?.hide()
         disposable = Observable.timer(800, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
@@ -40,8 +40,8 @@ class WelcomeScreen : AppCompatActivity(), HasAndroidInjector {
             }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
         disposable?.dispose()
     }
 }

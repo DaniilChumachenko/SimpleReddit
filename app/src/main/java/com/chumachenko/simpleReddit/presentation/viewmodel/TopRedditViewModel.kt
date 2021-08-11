@@ -2,17 +2,16 @@ package com.chumachenko.simpleReddit.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.chumachenko.simpleReddit.data.db.realmModel.RedditItemRealm
 import com.chumachenko.simpleReddit.data.repository.RedditRepository
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
+import com.chumachenko.simpleReddit.presentation.support.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class TopRedditViewModel @Inject constructor(private val redditRepository: RedditRepository) :
-    ViewModel() {
+    BaseViewModel() {
 
     private val _redditResponseItem: MutableLiveData<Resource<ArrayList<RedditItem>>> =
         MutableLiveData()
@@ -26,10 +25,8 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
         MutableLiveData()
     val redditItemForSort: LiveData<Resource<ArrayList<RedditItem>>> = _redditItemForSort
 
-    private val compositeDisposable = CompositeDisposable()
-
     fun getPostByType(subRed: String, typeSort: String, lastItem: String?) {
-        compositeDisposable.add(
+        launch {
             redditRepository.getRedditPostsByType(subRed, typeSort, lastItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -49,11 +46,11 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                     _redditResponseItem.value = Resource.error()
                     error.printStackTrace()
                 }))
-        )
+        }
     }
 
     fun getFromLocal() {
-        compositeDisposable.add(
+        launch {
             redditRepository.getFromLocal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,11 +65,11 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                     error.printStackTrace()
                 }))
 
-        )
+        }
     }
 
     fun getFromLocalForSort() {
-        compositeDisposable.add(
+        launch {
             redditRepository.getFromLocal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,7 +84,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                     error.printStackTrace()
                 }))
 
-        )
+        }
     }
 
     fun clearStorage(data: ArrayList<RedditItem>?) {
@@ -97,7 +94,7 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
             if (index > 49)
                 realmList.add(redditItem.toRealm())
         }
-        compositeDisposable.add(
+        launch {
             redditRepository.clearStorage(realmList)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,11 +105,6 @@ class TopRedditViewModel @Inject constructor(private val redditRepository: Reddi
                 }), ({ error ->
                     error.printStackTrace()
                 }))
-        )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+        }
     }
 }

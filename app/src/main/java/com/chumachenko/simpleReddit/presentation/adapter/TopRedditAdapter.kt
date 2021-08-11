@@ -5,15 +5,17 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.simpleReddit.GlobalConstants.MAX_POSTS_COUNT
 import com.chumachenko.simpleReddit.R
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.fragment.OnBottomReachedListener
 import com.chumachenko.simpleReddit.presentation.fragment.OnOpenPostListener
+import com.chumachenko.simpleReddit.presentation.support.DiffUtilCallback
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.v3_item_reddit.view.*
+import kotlinx.android.synthetic.main.item_reddit.view.*
 import java.util.*
 
 
@@ -27,7 +29,7 @@ class TopRedditAdapter(
         ItemTagViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.v3_item_reddit, parent, false)
+                .inflate(R.layout.item_reddit, parent, false)
         )
 
     override fun getItemCount() = list.size
@@ -40,12 +42,10 @@ class TopRedditAdapter(
             onBottomReachedListener.lastItem(true)
     }
 
-    fun updateList(newList: ArrayList<RedditItem>) {
-        val oldSize = itemCount
-        this.list.clear()
-        this.list.addAll(newList)
-        notifyItemRangeRemoved(0, oldSize)
-        notifyItemRangeInserted(0, itemCount)
+    fun updateList(newList: ArrayList<RedditItem>) = DiffUtil.calculateDiff(DiffUtilCallback(this.list, newList)).let {
+        list.clear()
+        list.addAll(newList)
+        it.dispatchUpdatesTo(this)
     }
 
     inner class ItemTagViewHolder(view: View) : RecyclerView.ViewHolder(view) {

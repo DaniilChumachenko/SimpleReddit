@@ -1,9 +1,9 @@
-package com.chumachenko.simpleReddit.presentation.viewmodel
+package com.chumachenko.simpleReddit.presentation.support
 
 class Resource<T>(
-        val status: Status,
-        var data: T?,
-        val throwable: Throwable?
+    val status: Status,
+    var data: T?,
+    val throwable: Throwable?
 ) {
 
     override fun equals(other: Any?): Boolean {

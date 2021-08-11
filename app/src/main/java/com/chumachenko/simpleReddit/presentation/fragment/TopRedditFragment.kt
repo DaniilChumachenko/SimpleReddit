@@ -18,8 +18,8 @@ import com.chumachenko.simpleReddit.GlobalConstants.MAX_POSTS_COUNT
 import com.chumachenko.simpleReddit.R
 import com.chumachenko.simpleReddit.data.repository.model.RedditItem
 import com.chumachenko.simpleReddit.presentation.adapter.TopRedditAdapter
-import com.chumachenko.simpleReddit.presentation.viewmodel.SortType
-import com.chumachenko.simpleReddit.presentation.viewmodel.Status
+import com.chumachenko.simpleReddit.presentation.support.SortType
+import com.chumachenko.simpleReddit.presentation.support.Status
 import com.chumachenko.simpleReddit.presentation.viewmodel.TopRedditViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
